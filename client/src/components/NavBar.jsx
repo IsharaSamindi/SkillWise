@@ -18,16 +18,16 @@ export default function NavBar() {
       <div className="nav-container">
         <div className="logo">
           <i className="fas fa-graduation-cap"></i>
-          SkillWise
-        </div>
+          <div className="logo-text">
+            <span className="logo-skill">Skill</span><span className="logo-wise">Wise</span>
+          </div>
+        </div>{/*
         <nav>
           <ul className="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#features">Features</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-        </nav>
+        </nav>*/}
         <div className="auth-buttons">
           <Link to="/login" className="btn btn-secondary">Login</Link>
           <Link to="/signup" className="btn btn-primary">Sign Up</Link>
