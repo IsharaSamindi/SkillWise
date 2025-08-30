@@ -1,5 +1,8 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import './LoginPage.css';
+import NavBar from './NavBar';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -45,6 +48,9 @@ export default function LoginPage() {
 
   return (
     <div className="modern-login-page">
+      {/* NavBar */}
+      <NavBar />
+      
       {/* Background */}
       <div className="login-background">
         <div className="gradient-overlay"></div>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import './SignupPage.css';
+import NavBar from './NavBar';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -47,6 +49,9 @@ export default function SignupPage() {
 
   return (
     <div className="modern-signup-page">
+      {/* NavBar */}
+      <NavBar />
+      
       {/* Background */}
       <div className="signup-background">
         <div className="gradient-overlay"></div>
