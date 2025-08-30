@@ -1,5 +1,8 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './LearnerDashboard.css';
+import NavBar from './NavBar';
 
 export default function LearnerDashboard() {
   const [activeTab, setActiveTab] = useState('browse');
@@ -71,6 +74,9 @@ export default function LearnerDashboard() {
 
   return (
     <div className="learner-dashboard">
+      {/* NavBar */}
+      <NavBar />
+      
       {/* Navigation */}
       <nav className="dashboard-navbar">
         <Link to="/" className="navbar-logo">

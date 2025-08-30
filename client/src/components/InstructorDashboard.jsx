@@ -1,5 +1,8 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './InstructorDashboard.css';
+import NavBar from './NavBar';
 
 export default function InstructorDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -45,6 +48,9 @@ export default function InstructorDashboard() {
 
   return (
     <div className="instructor-dashboard">
+      {/* NavBar */}
+      <NavBar />
+      
       {/* Navigation */}
       <nav className="dashboard-navbar">
         <Link to="/" className="navbar-logo">
