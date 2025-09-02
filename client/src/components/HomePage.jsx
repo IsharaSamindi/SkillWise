@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
@@ -13,12 +11,39 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="hero" id="home">
+        <div className="floating-elements">
+          <div className="floating-element element-1">
+            <i className="fas fa-graduation-cap"></i>
+          </div>
+          <div className="floating-element element-2">
+            <i className="fas fa-book"></i>
+          </div>
+          <div className="floating-element element-3">
+            <i className="fas fa-lightbulb"></i>
+          </div>
+          <div className="floating-element element-4">
+            <i className="fas fa-users"></i>
+          </div>
+          <div className="floating-element element-5">
+            <i className="fas fa-trophy"></i>
+          </div>
+          <div className="floating-element element-6">
+            <i className="fas fa-star"></i>
+          </div>
+        </div>
+        
         <div className="hero-content">
           <h1>Master New Skills, Share Your Expertise</h1>
-          <p>Connect with expert instructors and passionate learners in our comprehensive skill-sharing platform. Learn, teach, and grow together.</p>
+          <p>Connect with expert instructors and passionate learners in our comprehensive skill-sharing platform. Learn, teach, and grow together in a vibrant learning community.</p>
           <div className="hero-buttons">
-            <Link to="/signup" className="btn btn-primary">Start Learning</Link>
-            <Link to="/signup" className="btn btn-secondary">Become an Instructor</Link>
+            <Link to="/signup" className="btn btn-primary">
+              <i className="fas fa-rocket"></i>
+              Start Learning
+            </Link>
+            <Link to="/signup" className="btn btn-secondary">
+              <i className="fas fa-chalkboard-teacher"></i>
+              Become an Instructor
+            </Link>
           </div>
         </div>
       </section>
@@ -66,22 +91,6 @@ export default function HomePage() {
               </ul>
             </div>
 
-            {/* Admin Features */}
-            <div className="feature-card animate-on-scroll">
-              <div className="feature-icon">
-                <i className="fas fa-cog"></i>
-              </div>
-              <h3>For Administrators</h3>
-              <ul className="feature-list">
-                <li><i className="fas fa-check"></i> Manage all users and sessions</li>
-                <li><i className="fas fa-check"></i> Approve new skill sessions</li>
-                <li><i className="fas fa-check"></i> Generate detailed reports</li>
-                <li><i className="fas fa-check"></i> Handle support requests</li>
-                <li><i className="fas fa-check"></i> Post platform announcements</li>
-                <li><i className="fas fa-check"></i> Monitor reviews and feedback</li>
-                <li><i className="fas fa-check"></i> Maintain platform policies</li>
-              </ul>
-            </div>
           </div>
         </div>
       </section>
@@ -137,8 +146,6 @@ export default function HomePage() {
               <h3>Quick Links</h3>
               <ul>
                 <li><a href="#about">About Us</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#contact">Contact</a></li>
               </ul>
             </div>
@@ -149,15 +156,6 @@ export default function HomePage() {
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#privacy">Privacy Policy</a></li>
                 <li><a href="#terms">Terms of Service</a></li>
-              </ul>
-            </div>
-            <div className="footer-section">
-              <h3>Connect</h3>
-              <ul>
-                <li><a href="#facebook"><i className="fab fa-facebook"></i> Facebook</a></li>
-                <li><a href="#twitter"><i className="fab fa-twitter"></i> Twitter</a></li>
-                <li><a href="#linkedin"><i className="fab fa-linkedin"></i> LinkedIn</a></li>
-                <li><a href="#instagram"><i className="fab fa-instagram"></i> Instagram</a></li>
               </ul>
             </div>
           </div>

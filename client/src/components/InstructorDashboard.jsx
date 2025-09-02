@@ -1,11 +1,62 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './InstructorDashboard.css';
 import NavBar from './NavBar';
 
 export default function InstructorDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Fetch students data when component mounts or when students tab is activated
+  useEffect(() => {
+    if (activeTab === 'students') {
+      fetchStudents();
+    }
+  }, [activeTab]);
+
+  const fetchStudents = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Please log in to view student data');
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/auth/students', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setStudents(data.students || []);
+      } else {
+        setError(data.error || 'Failed to fetch students');
+      }
+    } catch (err) {
+      setError('Network error. Please check your connection.');
+      console.error('Error fetching students:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
   const [sessions, setSessions] = useState([
     {
       id: 1,
@@ -307,63 +358,65 @@ export default function InstructorDashboard() {
               </div>
 
               <div className="students-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Student</th>
-                      <th>Course</th>
-                      <th>Enrolled Date</th>
-                      <th>Progress</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div className="student-info">
-                          <div className="student-avatar">👩‍💻</div>
-                          <div>
-                            <div className="student-name">Sarah Johnson</div>
-                            <div className="student-email">sarah@email.com</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>React Masterclass</td>
-                      <td>Aug 15, 2025</td>
-                      <td>
-                        <div className="progress-bar">
-                          <div className="progress-fill" style={{width: '75%'}}></div>
-                        </div>
-                        <span className="progress-text">75%</span>
-                      </td>
-                      <td>
-                        <button className="message-btn">💬 Message</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="student-info">
-                          <div className="student-avatar">👨‍💻</div>
-                          <div>
-                            <div className="student-name">Mike Chen</div>
-                            <div className="student-email">mike@email.com</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>JavaScript Fundamentals</td>
-                      <td>Aug 10, 2025</td>
-                      <td>
-                        <div className="progress-bar">
-                          <div className="progress-fill" style={{width: '45%'}}></div>
-                        </div>
-                        <span className="progress-text">45%</span>
-                      </td>
-                      <td>
-                        <button className="message-btn">💬 Message</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                {loading ? (
+                  <div className="loading-message">Loading students...</div>
+                ) : error ? (
+                  <div className="error-message">
+                    <p>⚠️ {error}</p>
+                    <button onClick={fetchStudents} className="retry-btn">Try Again</button>
+                  </div>
+                ) : (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Student</th>
+                        <th>Course</th>
+                        <th>Enrolled Date</th>
+                        <th>Progress</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {students.length === 0 ? (
+                        <tr>
+                          <td colSpan="5" className="no-data">
+                            No students enrolled yet
+                          </td>
+                        </tr>
+                      ) : (
+                        students.map((student, index) => (
+                          <tr key={`${student.id}-${student.course_id}`}>
+                            <td>
+                              <div className="student-info">
+                                <div className="student-avatar">
+                                  {student.full_name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                  <div className="student-name">{student.full_name}</div>
+                                  <div className="student-email">{student.email}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td>{student.course_title}</td>
+                            <td>{formatDate(student.enrolled_at)}</td>
+                            <td>
+                              <div className="progress-bar">
+                                <div 
+                                  className="progress-fill" 
+                                  style={{width: `${student.progress || 0}%`}}
+                                ></div>
+                              </div>
+                              <span className="progress-text">{student.progress || 0}%</span>
+                            </td>
+                            <td>
+                              <button className="message-btn">💬 Message</button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           )}
