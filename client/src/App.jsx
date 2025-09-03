@@ -5,7 +5,6 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import InstructorDashboard from './components/InstructorDashboard';
 import LearnerDashboard from './components/LearnerDashboard';
-import AdminDashboard from './components/AdminDashboard';
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
         <Route path="/learner-dashboard" element={<LearnerDashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );

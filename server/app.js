@@ -29,7 +29,45 @@ const testDatabaseConnection = async () => {
 testDatabaseConnection();
 
 const authRoutes = require('./routes/authRoutes');
+// const instructorRoutes = require('./routes/instructorRoutes-test');
+const learnerRoutes = require('./routes/learnerRoutes');
+
 app.use('/api/auth', authRoutes);
+// app.use('/api/instructors', instructorRoutes);
+app.use('/api/learners', learnerRoutes);
+
+// Simple instructors route for testing
+app.get('/api/instructors', async (req, res) => {
+  try {
+    const pool = require('./config/db');
+    const result = await pool.query(`
+      SELECT 
+        instructor_id,
+        user_id,
+        experience_years,
+        bio,
+        profile_photo,
+        phone_number,
+        address,
+        first_name,
+        last_name
+      FROM instructors
+      ORDER BY instructor_id
+      LIMIT 50
+    `);
+    
+    res.json({
+      success: true,
+      data: result.rows,
+      message: `Found ${result.rows.length} instructors`
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
 
 // Health check endpoint
 app.get('/api/health', async (req, res) => {

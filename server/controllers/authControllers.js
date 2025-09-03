@@ -43,11 +43,12 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ error: 'Role must be either instructor, learner, or admin' });
     }
 
-    // Validate phone number format if provided
-    if (phoneNumber && phoneNumber.trim()) {
-      const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
-      if (!phoneRegex.test(phoneNumber.trim())) {
-        return res.status(400).json({ error: 'Please provide a valid phone number' });
+    // Validate phone number format if provided (for learners)
+    if (phoneNumber && phoneNumber.trim() && role === 'learner') {
+      if (!DatabaseHelper.validateSriLankanPhone(phoneNumber.trim())) {
+        return res.status(400).json({ 
+          error: 'Please provide a valid Sri Lankan phone number (+94XXXXXXXXX or 0XXXXXXXXX)' 
+        });
       }
     }
 
@@ -67,17 +68,26 @@ exports.signup = async (req, res) => {
       profilePhotoPath = `/uploads/profiles/${req.file.filename}`;
     }
 
-    // Create user
+    // Create user (basic info only)
     const user = await DatabaseHelper.createUser({
       email: email.toLowerCase(), // Store email in lowercase
       password: hashedPassword,
       firstName: firstName.trim(),
       lastName: lastName.trim(),
-      role,
-      address: address ? address.trim() : null,
-      phoneNumber: phoneNumber ? phoneNumber.trim() : null,
-      profilePhoto: profilePhotoPath
+      role
     });
+
+    // If user is a learner, create learner profile with additional info
+    let learnerProfile = null;
+    if (role === 'learner') {
+      learnerProfile = await DatabaseHelper.createLearnerProfile({
+        userId: user.id,
+        address: address ? address.trim() : null,
+        phoneNumber: phoneNumber ? phoneNumber.trim() : null,
+        profilePhoto: profilePhotoPath,
+        learningGoals: req.body.learningGoals ? req.body.learningGoals.trim() : null
+      });
+    }
 
     // Generate JWT token
     const token = jwt.sign(
@@ -98,11 +108,12 @@ exports.signup = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        fullName: user.full_name,
+        fullName: `${user.first_name} ${user.last_name}`,
         firstName: user.first_name,
         lastName: user.last_name,
         role: user.role,
-        createdAt: user.created_at
+        createdAt: user.created_at,
+        ...(learnerProfile && { learnerProfile })
       }
     });
   } catch (err) {
